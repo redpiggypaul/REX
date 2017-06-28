@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="REXAUTO4REX" verbose="5">
+    <listeners>
+        <listener class-name="Utility.TestngListeners"/>
+    </listeners>
+    <test name="date" preserve-order="true">
+        <parameter name="port" value="4723"/>
+        <classes>
+            <class name="REXSH.REXAUTO.AppTestAccount">
+            </class>
+        </classes>
+    </test>
+</suite>
