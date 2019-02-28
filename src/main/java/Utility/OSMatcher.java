@@ -1,4 +1,4 @@
-package Utility;
+package utility;
 
 /**
  * Created by appledev131 on 4/14/16.
@@ -32,7 +32,7 @@ public class OSMatcher {
         String result = null;
         if (theCode.equalsIgnoreCase("and") || theCode.toLowerCase().contains("and")) {
             result = "AND";
-        } else if (theCode.equalsIgnoreCase("ios") || theCode.toLowerCase().contains("ios")) {
+        } else if (theCode.equalsIgnoreCase("AppPage") || theCode.toLowerCase().contains("AppPage")) {
             result = "IOS";
         } else {
             result = "ERROR";
@@ -44,7 +44,7 @@ public class OSMatcher {
         int result = 0;
         if (theCode.equalsIgnoreCase("and") || theCode.toLowerCase().contains("and")) {
             result = 1;
-        } else if (theCode.equalsIgnoreCase("ios") || theCode.toLowerCase().contains("ios")) {
+        } else if (theCode.equalsIgnoreCase("AppPage") || theCode.toLowerCase().contains("AppPage")) {
             result = 2;
         } else {
             result = 0;
@@ -57,7 +57,7 @@ public class OSMatcher {
         if (theCode instanceof String) {
             if (((String) theCode).equalsIgnoreCase("and") || ((String) theCode).toLowerCase().contains("and")) {
                 result = 1;
-            } else if (((String) theCode).equalsIgnoreCase("ios") || ((String) theCode).toLowerCase().contains("ios")) {
+            } else if (((String) theCode).equalsIgnoreCase("AppPage") || ((String) theCode).toLowerCase().contains("AppPage")) {
                 result = 2;
             } else {
                 result = 0;

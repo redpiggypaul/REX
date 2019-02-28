@@ -1,4 +1,4 @@
-package Utility;
+package utility;
 
 /**
  * Created by appledev131 on 8/29/16.
@@ -12,18 +12,9 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.io.Files;
 
 //操作查找文件的类
 public class TextSearchFile {

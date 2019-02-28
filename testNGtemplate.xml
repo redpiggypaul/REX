@@ -1,12 +1,14 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="REXAUTO4REX" verbose="5">
+<suite name="SCWMAPPBetaIOS" verbose="5">
     <listeners>
-        <listener class-name="Utility.TestngListeners"/>
+        <listener class-name="org.uncommons.reportng.HTMLReporter" />
+        <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
     </listeners>
     <test name="date" preserve-order="true">
-        <parameter name="port" value="4723"/>
+        <parameter name="APPIUM_Driver_port" value="4723"/>
+        <parameter name="APPIUM_Driver_ip" value="127.0.0.1"/>
         <classes>
-            <class name="REXSH.REXAUTO.AppTestAccount">
+            <class name="sc.wm.ios.ios.AppTest_SCWM_Demo">
             </class>
         </classes>
     </test>

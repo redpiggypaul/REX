@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Utility;
+package utility;
 
 import jxl.Sheet;
 import jxl.Workbook;

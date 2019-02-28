@@ -1,12 +1,11 @@
 /**
  *
  */
-package Utility;
+package utility;
 
-import REXSH.REXAUTO.Component.Page.Element.ElementMapping;
-import REXSH.REXAUTO.Component.Page.Element.operationItem;
-import REXSH.REXAUTO.LocalException.XMLException;
-import jxl.write.biff.*;
+import Component.Page.Element.ElementMapping;
+import Component.Page.Element.operationItem;
+import LocalException.XMLException;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -15,9 +14,8 @@ import org.dom4j.io.SAXReader;
 import java.io.*;
 import java.io.File;
 import java.util.*;
-import java.util.Map.Entry;
 
-import static Utility.OSMatcher.matchOS;
+import static utility.OSMatcher.matchOS;
 
 /**
  * @author lyou009  , Modified by pzhu023
@@ -25,6 +23,7 @@ import static Utility.OSMatcher.matchOS;
 public class XmlUtils {
     private static Logger theLogger;
     private static String logSpace4thisPage = "             ";
+
     public XmlUtils(Logger l) {
         theLogger = l;
     }
@@ -48,21 +47,21 @@ public class XmlUtils {
                 throw new XMLException("Wrong OS id for : " + osType + "NO match XML Decoder Method !!!");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readXMLDocumentAll : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readXMLDocumentAll : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return elementsMap;
     }
 
-    public static HashMap<String, operationItem> readActionXMLDocument
-            (String fileNameXML) throws Exception {
+    public static HashMap<StringBuilder, operationItem> readActionXMLDocument
+            (StringBuilder fileNameXML) throws Exception {
         return readActionXMLDocumentAll(fileNameXML, 0);
     }
 
-    public static HashMap<String, operationItem> readActionXMLDocumentAll
-            (String fileNameXML, Object osType) throws Exception {
-        HashMap<String, operationItem> opeMap = new HashMap<String, operationItem>();
+    public static HashMap<StringBuilder, operationItem> readActionXMLDocumentAll
+            (StringBuilder fileNameXML, Object osType) throws Exception {
+        HashMap<StringBuilder, operationItem> opeMap = new HashMap<StringBuilder, operationItem>();
         opeMap.clear();
         int lineN = 1;
         try {
@@ -83,26 +82,26 @@ public class XmlUtils {
                         //System.out.println(logSpace4thisPage + "Line NUM : " + lineN);
                         lineN++;
                         Element elementObj = (Element) it.next();
-                        String oName = elementObj.attributeValue("OperationName");
-                        String pName = elementObj.attributeValue("PageName");
-                        String oType = elementObj.attributeValue("OperationType");
-                        String eleName = elementObj.attributeValue("elementName");
-                        String eleType = elementObj.attributeValue("elementType");
-                        String elePara = elementObj.attributeValue("elementParameter");
+                        StringBuilder oName = new StringBuilder(elementObj.attributeValue("OperationName"));
+                        StringBuilder pName = new StringBuilder(elementObj.attributeValue("PageName"));
+                        StringBuilder oType = new StringBuilder(elementObj.attributeValue("OperationType"));
+                        StringBuilder eleName = new StringBuilder(elementObj.attributeValue("elementName"));
+                        //     String eleType = elementObj.attributeValue("elementType");
+                        StringBuilder elePara = new StringBuilder(elementObj.attributeValue("elementParameter"));
                         Integer s = Integer.parseInt(elementObj.attributeValue("Step"));
 
                         //System.out.println(oName);
                         //System.out.println(s.toString());
                         operationItem eLocator;
-                        eLocator = new operationItem(oName, pName, oType, eleName, eleType, elePara, s);
-                        opeMap.put(oName + ":" + s.toString(), eLocator);
+                        eLocator = new operationItem(oName, pName, oType, eleName, elePara, s);
+                        opeMap.put(new StringBuilder(oName + ":" + s), eLocator);
                     }
                 } else {
                     throw new XMLException("The Root Line is not PAGE!!!");
                 }
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readActionXMLDocumentAll : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readActionXMLDocumentAll : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -186,7 +185,7 @@ public class XmlUtils {
                 }
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readXMLDocumentNeg : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readXMLDocumentNeg : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -241,7 +240,7 @@ public class XmlUtils {
                 }
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readXMLDocument : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readXMLDocument : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -249,10 +248,10 @@ public class XmlUtils {
     }
 
 
-    public static HashMap<String, operationItem> readXMLDocument4Ope
-            (String fileNameXML, Object osType) throws Exception {
-        HashMap<String, operationItem> elementsMap = new HashMap<String, operationItem>();
-        HashMap<String, operationItem> tMap = new HashMap<String, operationItem>();
+    public static HashMap<StringBuilder, operationItem> readXMLDocument4Ope
+            (StringBuilder fileNameXML, Object osType) throws Exception {
+        HashMap<StringBuilder, operationItem> elementsMap = new HashMap<StringBuilder, operationItem>();
+        HashMap<StringBuilder, operationItem> tMap = new HashMap<StringBuilder, operationItem>();
         elementsMap.clear();
         tMap.clear();
         try {
@@ -269,11 +268,11 @@ public class XmlUtils {
                 //System.out.println(logSpace4thisPage + modeValue);
                 if ((modeValue.equalsIgnoreCase("ready") || modeValue.toLowerCase().contains("ready"))) {
                     //System.out.println(logSpace4thisPage + "put!!!");
-                    elementsMap.put((String) eleEntry.getKey(), (operationItem) eleEntry.getValue());
+                    elementsMap.put((StringBuilder) eleEntry.getKey(), (operationItem) eleEntry.getValue());
                 }
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readXMLDocument4Ope : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readXMLDocument4Ope : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -300,11 +299,13 @@ public class XmlUtils {
                 throw new XMLException("Wrong OS type for findRouteList : ");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findRouteList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findRouteList : " + e.getMessage());
         }
         return tMap;
     }
 
+
+    /*
 
     public static HashMap<String, ElementMapping> readANDXMLDocument
             (String path, String pageName, String para1, String tPageName) throws Exception {
@@ -364,15 +365,15 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocument : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocument : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return elementsMap;
     }
-
+*/
     public static HashMap<String, ElementMapping> readIOSXMLDocument4X
-            (String fileNameXML) throws Exception {
+    (String fileNameXML) throws Exception {
         //System.out.println(logSpace4thisPage + "readIOSXMLDocument4X NOT ready !!!");
         return null;
     }
@@ -424,7 +425,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 IOS");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readIOSXMLDocument4Base : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readIOSXMLDocument4Base : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -500,7 +501,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocument4X : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocument4X : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -554,7 +555,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocument4Base : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocument4Base : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -629,7 +630,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDoc4loading : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDoc4loading : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -704,7 +705,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocument4Mode : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocument4Mode : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -779,7 +780,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocumentN : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocumentN : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -852,7 +853,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readIOSXMLDocumentN : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readIOSXMLDocumentN : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -902,7 +903,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findANDXMLRouteList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findANDXMLRouteList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -953,7 +954,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findIOSRouteList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findIOSRouteList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1000,7 +1001,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 IOS");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findIOSDefaultValueList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findIOSDefaultValueList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1047,7 +1048,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 IOS");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findIOSWaitStepList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findIOSWaitStepList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1082,7 +1083,7 @@ public class XmlUtils {
                             String windowValue = elementObj.attributeValue("triggerWindow");
                             //System.out.println(logSpace4thisPage + "### " + name);
                             //System.out.println(logSpace4thisPage + "### " + waitTime);
-                            if(windowValue!="") {
+                            if (windowValue != "") {
                                 elementsMap.put(name, windowValue);
                             }
                         } catch (Exception e) {
@@ -1096,7 +1097,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 IOS");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findIOSWindowList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findIOSWindowList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1140,7 +1141,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findANDTextContentList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findANDTextContentList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1185,7 +1186,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findIOSTextContentList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findIOSTextContentList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1231,13 +1232,12 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findANDDefaultValueList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findANDDefaultValueList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return elementsMap;
     }
-
 
 
     public static HashMap<String, Integer> findANDWaitStepList
@@ -1277,7 +1277,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findANDWaitStepList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findANDWaitStepList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1309,7 +1309,7 @@ public class XmlUtils {
                             String windowValue = elementObj.attributeValue("triggerWindow");
                             //System.out.println(logSpace4thisPage + "### " + name);
                             //System.out.println(logSpace4thisPage + "### " + defaultValue);
-                            if(windowValue!="") {
+                            if (windowValue != "") {
                                 elementsMap.put(name, windowValue);
                             }
                         } catch (Exception e) {
@@ -1324,7 +1324,7 @@ public class XmlUtils {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.findANDWindowList : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.findANDWindowList : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1335,31 +1335,14 @@ public class XmlUtils {
     public static void main(String args[]) {
         try {
             SortedSet<operationItem> parts = new TreeSet<operationItem>();
-            operationItem aa = (new operationItem("xxx", "", "", "", "", "", 1));
-            operationItem bb = (new operationItem("asv", "", "", "", "", "", 2));
-            operationItem cc = (new operationItem("123", "", "", "", "", "", 3));
+            operationItem aa = (new operationItem(new StringBuilder("xxx"), new StringBuilder(""), new StringBuilder(""), new StringBuilder(""), new StringBuilder(""), 1));
             //  operationItem[] ada  = new operationItem[]{aa, bb, cc};
             parts.add(aa);
-            parts.add(bb);
-            parts.add(cc);
-
-            //System.out.println("SIZE : " + parts.size());
-            //System.out.println(parts);
-
-            //System.out.println(logSpace4thisPage + System.getProperty("user.dir"));
-
-    //        readActionXMLDoc4Set(("\\OperationXML\\Action\\test.xml").replaceAll("\\\\", File.separator), "");
-            // MAC: /Users/appledev131/Documents/AUTO/REXAUTO
-            //  HashMap map = readANDXMLDocumentN("/PageXML/And/homePage.xml");
-            //     HashMap map = readXMLDocument("/PageXML/And/homePage.xml", 1);
-      //      HashMap mapAction = readActionXMLDocumentAll(("\\OperationXML\\Action\\Action_login.xml").replaceAll("\\\\", File.separator), 1);
-
 
             long gstartTime = System.currentTimeMillis();
-            readANDXMLDocument4Base("/src/main/java/Utility/"+"test.xml");
+            readANDXMLDocument4Base(new String("/src/main/java/utility/" + "test.xml"));
 
             System.out.println(System.currentTimeMillis() - gstartTime + " ms");
-
 
 
         } catch (Exception e) {

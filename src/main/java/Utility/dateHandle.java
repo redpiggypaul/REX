@@ -1,4 +1,4 @@
-package Utility;
+package utility;
 
 /**
  * Created by appledev131 on 8/1/16.

@@ -1,4 +1,4 @@
-package Utility;
+package utility;
 
 /**
  * Created by appledev131 on 8/29/16.
@@ -74,12 +74,12 @@ static Collection<File> listFiles(File root){
         //guava
         run(new Runnable(){
             public void run(){
-                int size = Files.fileTreeTraverser().breadthFirstTraversal(dir).filter(new Predicate<File>(){
-                    public boolean apply(File input) {
-                        return input.isFile();
-                    }
-                }).size();
-                System.out.printf("ͨ�� Guava ������ %s ���ļ���", size);
+       //         int size = Files.fileTreeTraverser().breadthFirstTraversal(dir).filter(new Predicate<File>(){
+         //           public boolean apply(File input) {
+           //             return input.isFile();
+             //       }
+               // }).size();
+               // System.out.printf("ͨ�� Guava ������ %s ���ļ���", size);
             }
         });
 

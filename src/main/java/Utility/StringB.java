@@ -1,9 +1,9 @@
-package Utility;
+package utility;
 
-import REXSH.REXAUTO.LocalException.REXException;
-import org.openqa.selenium.By;
 
-import java.io.File;
+import LocalException.SCException;
+import LocalException.SCException;
+
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ public class StringB {
     }
 
 
-    public static boolean assertTestResult(String testResult, String exceptedResult) throws REXException {
+    public static boolean assertTestResult(String testResult, String exceptedResult) throws SCException {
         boolean result = true;
         testResult = testResult.toLowerCase();
         String sampleResult = testResult;
@@ -97,7 +97,7 @@ public class StringB {
             return result;
         } catch (Exception e) {
             result.append("Exception appear during element content compare");
-            throw new REXException("BaseAction : textContentCheck : " + e.getMessage());
+            throw new SCException("BaseAction : textContentCheck : " + e.getMessage());
         }
     }
 

@@ -1,6 +1,8 @@
-package Utility;
+package utility;
 
-import REXSH.REXAUTO.LocalException.REXException;
+
+import LocalException.SCException;
+import LocalException.SCException;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
@@ -9,7 +11,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static REXSH.REXAUTO.Component.Driver.ScreenShot.ScreenShot;
 
 
 public class duplicatedmatch2 {
@@ -26,7 +27,8 @@ public class duplicatedmatch2 {
     }
 
 
-    public static boolean assertTestResult(String testResult, String exceptedResult) throws REXException {
+    public static boolean assertTestResult(String testResult, String exceptedResult) throws SCException
+    {
         boolean result = true;
         testResult = testResult.toLowerCase();
         String sampleResult = testResult;
@@ -95,7 +97,7 @@ public class duplicatedmatch2 {
             return result;
         } catch (Exception e) {
             result.append("Exception appear during element content compare");
-            throw new REXException("BaseAction : textContentCheck : " + e.getMessage());
+            throw new SCException("BaseAction : textContentCheck : " + e.getMessage());
         }
     }
 

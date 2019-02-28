@@ -1,19 +1,16 @@
-package Utility;
+package utility;
 
 /**
  * Created by appledev131 on 8/29/16.
  */
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 //操作查找文件的类

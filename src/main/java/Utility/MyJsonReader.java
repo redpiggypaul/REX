@@ -1,8 +1,9 @@
-package Utility;
+package utility;
 
-import REXSH.REXAUTO.Component.Page.ANDPageContentMap;
-import REXSH.REXAUTO.Component.Page.Element.ElementMapping;
-import REXSH.REXAUTO.LocalException.XMLException;
+import Component.Page.Element.ElementMapping;
+import Component.Page.Element.FFPandaElementEntity;
+import Component.Page.Element.elementEntity;
+import LocalException.XMLException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,7 +15,6 @@ import org.dom4j.io.SAXReader;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -25,7 +25,7 @@ public class MyJsonReader {
     public static void main(String[] args) {
         try {
             long gstartTime = System.currentTimeMillis();
-            TreeMap<String, ElementMapping> elementsMap = readJSON_4_WebElement();
+          //  TreeMap<String, ElementMapping> elementsMap = readJSON_4_WebElement();
             //System.out.println(System.currentTimeMillis() - gstartTime + " ms");
             //System.out.println(elementsMap.size());
             createJSON_WebElement();
@@ -40,7 +40,7 @@ public class MyJsonReader {
         // 创建json解析器
         JsonParser parser = new JsonParser();
         // 使用解析器解析json数据，返回值是JsonElement，强制转化为其子类JsonObject类型
-        JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + "/src/main/java/Utility/test.json"));
+        JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + "/src/main/java/utility/test.json"));
 
         // 使用JsonObject的get(String memeberName)方法返回JsonElement，再使用JsonElement的getAsXXX方法得到真实类型
         //System.out.println("cat = " + object.get("cat").getAsString());
@@ -55,7 +55,7 @@ public class MyJsonReader {
         //System.out.println("pop = " + object.get("pop").getAsString());
     }
 
-
+/*
     public static TreeMap<String, ElementMapping> readJSON_4_WebElement() throws Exception {
         TreeMap<String, ElementMapping> elementsMap = new TreeMap<String, ElementMapping>();
         elementsMap.clear();
@@ -66,7 +66,7 @@ public class MyJsonReader {
         StringBuilder theFileName = new StringBuilder("testpage.json");
         // System.getProperty("user.dir")
         // JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + theFileName));
-        JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + "/src/main/java/Utility/" + theFileName));
+        JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + "/src/main/java/utility/" + theFileName));
 
         try {
             if (object.get("pagename").getAsString().equalsIgnoreCase(theFileName.toString())) {
@@ -99,14 +99,14 @@ public class MyJsonReader {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocument4Base : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocument4Base : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             return elementsMap;
         }
     }
-
+*/
 
     public static HashMap<String, ElementMapping> readJSON_4_WebElement(String fileName) throws Exception {
         // long startTime = System.currentTimeMillis();
@@ -124,7 +124,7 @@ public class MyJsonReader {
         JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + theFileName));
 
         try {
-           // //System.out.println("~~~~~~~~~~~~ the JSON file pagename att is  : " + object.get("pagename").getAsString() );
+            // //System.out.println("~~~~~~~~~~~~ the JSON file pagename att is  : " + object.get("pagename").getAsString() );
             if ((theFileName.toString().toLowerCase().endsWith(object.get("pagename").getAsString().toLowerCase()))) {
                 JsonArray languages2 = object.getAsJsonArray("elements");
                 for (JsonElement jsonElement : languages2) {
@@ -156,7 +156,7 @@ public class MyJsonReader {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -166,6 +166,58 @@ public class MyJsonReader {
     }
 
 
+    public static HashMap<String, elementEntity> readJSON_4_WebElement_NEW(String fileName) throws Exception {
+        // long startTime = System.currentTimeMillis();
+        HashMap<String, elementEntity> elementsMap = new HashMap<String, elementEntity>();
+        elementsMap.clear();
+        int lineN = 1;
+        // 创建json解析器
+        JsonParser parser = new JsonParser();
+        // 使用解析器解析json数据，返回值是JsonElement，强制转化为其子类JsonObject类型
+        //System.out.println("~~~~~~~~~~~~ the JSON file is : " + fileName );
+        //System.out.println("~~~~~~~~~~~~ the JSON file abs path is : " + System.getProperty("user.dir") + fileName );
+        StringBuilder theFileName = new StringBuilder(fileName);
+        // System.getProperty("user.dir")
+        // JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + theFileName));
+        JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + theFileName));
+
+        try {
+            // //System.out.println("~~~~~~~~~~~~ the JSON file pagename att is  : " + object.get("pagename").getAsString() );
+            if ((theFileName.toString().toLowerCase().endsWith(object.get("pagename").getAsString().toLowerCase()))) {
+                JsonArray languages2 = object.getAsJsonArray("elements");
+                for (JsonElement jsonElement : languages2) {
+                    lineN++;
+                    try {
+                        JsonObject elementLine = jsonElement.getAsJsonObject();
+                        //     Element elementObj = (Element) it.next();
+                        StringBuilder name = new StringBuilder(elementLine.get("name").getAsString());
+                        StringBuilder type = new StringBuilder(elementLine.get("type").getAsString());
+                        StringBuilder value = new StringBuilder(elementLine.get("value").getAsString());
+                        StringBuilder nextPage = new StringBuilder(elementLine.get("NextPage").getAsString());
+                        StringBuilder showMode = new StringBuilder(elementLine.get("showMode").getAsString());
+                        StringBuilder dValue = new StringBuilder(elementLine.get("defaultValue").getAsString());
+                        StringBuilder text = new StringBuilder(elementLine.get("textContent").getAsString());
+                        StringBuilder tWin = new StringBuilder(elementLine.get("triggerWindow").getAsString());
+                        StringBuilder strHM = new StringBuilder(elementLine.get("strHandleMode").getAsString());
+                        elementEntity eLocator;
+                        eLocator = new elementEntity(name, value, type, showMode, dValue, text, tWin, strHM);
+                        elementsMap.put(name.toString(), eLocator);
+                    } catch (Exception e) {
+                        throw new XMLException("The content in Element Line " + lineN + "is incorrect : " + e.getCause());
+                    }
+                }
+            } else {
+                throw new XMLException("The NAME att is missing in the pageName 4 Android");
+            }
+        } catch (XMLException e) {
+            throw new XMLException("utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //System.out.println("^^^^^^   readJSON_4_WebElement ：" + (System.currentTimeMillis() - startTime) + " ms    ^^^^^^");
+            return elementsMap;
+        }
+    }
 
 
     public static HashMap<String, String> readJSON_4_dValue(String fileName) throws Exception {
@@ -202,7 +254,51 @@ public class MyJsonReader {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //System.out.println("^^^^^^   readJSON_4_dValue ：" + (System.currentTimeMillis() - startTime) + " ms    ^^^^^^");
+            return elementsMap;
+        }
+    }
+
+
+    public static HashMap<String, StringBuilder> readJSON_4_dValue_NEW(String fileName) throws Exception {
+        // long startTime = System.currentTimeMillis();
+        HashMap<String, StringBuilder> elementsMap = new HashMap<String, StringBuilder>();
+        elementsMap.clear();
+        int lineN = 1;
+        // 创建json解析器
+        JsonParser parser = new JsonParser();
+        // 使用解析器解析json数据，返回值是JsonElement，强制转化为其子类JsonObject类型
+        //System.out.println("~~~~~~~~~~~~ the JSON file is : " + fileName );
+        //System.out.println("~~~~~~~~~~~~ the JSON file abs path is : " + System.getProperty("user.dir") + fileName );
+        StringBuilder theFileName = new StringBuilder(fileName);
+        // System.getProperty("user.dir")
+        // JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + theFileName));
+        JsonObject object = (JsonObject) parser.parse(new FileReader(System.getProperty("user.dir") + theFileName));
+
+        try {
+            if ((theFileName.toString().toLowerCase().endsWith(object.get("pagename").getAsString().toLowerCase()))) {
+                JsonArray languages2 = object.getAsJsonArray("elements");
+                for (JsonElement jsonElement : languages2) {
+                    lineN++;
+                    try {
+                        JsonObject elementLine = jsonElement.getAsJsonObject();
+                        //     Element elementObj = (Element) it.next();
+                        StringBuilder name = new StringBuilder(elementLine.get("name").getAsString());
+                        StringBuilder dValue = new StringBuilder(elementLine.get("defaultValue").getAsString());
+                        elementsMap.put(name.toString(), dValue);
+                    } catch (Exception e) {
+                        throw new XMLException("The content in Element Line " + lineN + "is incorrect : " + e.getCause());
+                    }
+                }
+            } else {
+                throw new XMLException("The NAME att is missing in the pageName 4 Android");
+            }
+        } catch (XMLException e) {
+            throw new XMLException("utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -246,7 +342,7 @@ public class MyJsonReader {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -254,7 +350,6 @@ public class MyJsonReader {
             return elementsMap;
         }
     }
-
 
 
     public static HashMap<String, String> readJSON_4_tWin(String fileName) throws Exception {
@@ -282,7 +377,7 @@ public class MyJsonReader {
                         //     Element elementObj = (Element) it.next();
                         String name = elementLine.get("name").getAsString();
                         String dValue = elementLine.get("triggerWindow").getAsString();
-                        if(!dValue.equals("")) {
+                        if (!dValue.equals("")) {
                             elementsMap.put(name, dValue);
                         }
                     } catch (Exception e) {
@@ -293,7 +388,7 @@ public class MyJsonReader {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.MyJsonReader.readJSON_4_WebElement : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -302,8 +397,7 @@ public class MyJsonReader {
         }
     }
 
-
-
+/*
     public static HashMap<String, ElementMapping> readANDXMLDocument4Base
             (String fileNameXML) throws Exception {
         HashMap<String, ElementMapping> elementsMap = new HashMap<String, ElementMapping>();
@@ -350,12 +444,13 @@ public class MyJsonReader {
                 throw new XMLException("The NAME att is missing in the pageName 4 Android");
             }
         } catch (XMLException e) {
-            throw new XMLException("Utility.XmlUtils.readANDXMLDocument4Base : " + e.getMessage());
+            throw new XMLException("utility.XmlUtils.readANDXMLDocument4Base : " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return elementsMap;
     }
+*/
 
     public static void createJSON() throws IOException {
 
@@ -413,7 +508,7 @@ public class MyJsonReader {
         object.addProperty("pop", true);
 
         String jsonStr = object.toString();   // 将json对象转化成json字符串
-        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/main/java/Utility/" + "data.json")));
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/main/java/utility/" + "data.json")));
         pw.print(jsonStr);
         pw.flush();
         pw.close();
@@ -454,9 +549,45 @@ public class MyJsonReader {
             object.add("elements", languages);   // 将数组添加到json对象
         }
 
+        String jsonStr = object.toString();   // 将json对象转化成json字符串
+        // jsonStr.replaceAll("}","}"+line);
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(pathName + "/" + fileName)));
+        pw.print(jsonStr);
+        pw.flush();
+        pw.close();
+    }
+
+    public static void createJSON_PageElement(TreeMap<String, FFPandaElementEntity> extEleMap, StringBuilder fileName, StringBuilder pathName) throws IOException {
+        if (fileName.toString().endsWith(".json")) {
+        } else if (fileName.toString().contains(".")) {
+            fileName = new StringBuilder(fileName.substring(0, fileName.lastIndexOf(".")) + ".json");
+        } else {
+            fileName = new StringBuilder(fileName + ".json");
+        }
+        JsonObject object = new JsonObject();  // 创建一个json对象
+        object.addProperty("pagename", fileName.toString());       // 为json对象添加属性
+
+        JsonArray languages = new JsonArray(); // 创建json数组
+
+        // for (Iterator it = extEleMap.entrySet().iterator(); it.hasNext(); ) {
+        for (Iterator it = extEleMap.keySet().iterator(); it.hasNext(); ) {
+
+            JsonObject language = new JsonObject();
+            // Map.Entry eleEntry = (Map.Entry) it.next();
+            //  ElementMapping theEle = (ElementMapping) eleEntry.getValue();
+            FFPandaElementEntity theEle = extEleMap.get(it.next());
+            language.addProperty("pageName",theEle.getPageName().toString());
+            language.addProperty("elementName", theEle.getElementName().toString());
+            language.addProperty("locatorType", theEle.getLocatorType().toString());
+            language.addProperty("locatorStr", theEle.getLocatorStr().toString());
+            language.addProperty("defaultValue", theEle.getDefaultValue().toString());
+            language.addProperty("textContent", theEle.getTextContent().toString());
+            language.addProperty("triggerWindow", theEle.getTriggerWin().toString());
+            languages.add(language);
+            object.add("elements", languages);   // 将数组添加到json对象
+        }
 
         String jsonStr = object.toString();   // 将json对象转化成json字符串
-       // jsonStr.replaceAll("}","}"+line);
 
         PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(pathName + "/" + fileName)));
         pw.print(jsonStr);
